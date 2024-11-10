@@ -3,33 +3,34 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useEffect, useTransition } from 'react';
-import { signInWithEmailAndPassword } from '@/app/actions';
-import { getCsrfToken } from 'next-auth/react';
-import { signInSchema } from '@/schema/auth';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { signUpWithEmailAndPassword } from '@/app/actions';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import z from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { signUpSchema } from '@/schema/auth';
+import { getCsrfToken } from 'next-auth/react';
 import { useToast } from '@/hooks/use-toast';
 
 function EmailPasswordForm() {
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof signInSchema>>({
-    resolver: zodResolver(signInSchema),
+  const form = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
       email: '',
       password: '',
+      confirmPassword: '',
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof signInSchema>) => {
+  const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
     startTransition(async () => {
-      const response = await signInWithEmailAndPassword(values);
+      const response = await signUpWithEmailAndPassword(values);
       toast({
         variant: 'destructive',
-        description: response.message,
+        description: response?.message,
       });
     });
   };
@@ -63,6 +64,19 @@ function EmailPasswordForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>password</FormLabel>
+              <FormControl>
+                <Input type="password" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="confirmPassword"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirm Password</FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>

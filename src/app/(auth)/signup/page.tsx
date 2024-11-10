@@ -13,9 +13,9 @@ export default async function Page() {
         <CardContent className="space-y-3">
           <EmailPasswordForm />
           <p>
-            Dont have an account,{' '}
-            <Link className="underline text-blue-500" href="/signup">
-              sign up here!
+            Already have an account,{' '}
+            <Link className="underline text-blue-500" href="/signin">
+              sign in here!
             </Link>
           </p>
         </CardContent>
