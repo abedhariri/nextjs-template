@@ -25,7 +25,9 @@ export default function Account({ session }: Props) {
         {session.user?.image ? (
           <Image className="rounded-full" alt="account image" src={session?.user?.image || ''} width={40} height={40} />
         ) : (
-          <div className="rounded-full bg-black p-2 text-sm text-white">{getInitials(session.user?.name)}</div>
+          <div className="rounded-full bg-black p-2 text-sm text-white">
+            {getInitials(session.user?.name || session.user?.email)}
+          </div>
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent>

@@ -27,10 +27,11 @@ function EmailPasswordForm() {
   const onSubmit = async (values: z.infer<typeof signInSchema>) => {
     startTransition(async () => {
       const response = await signInWithEmailAndPassword(values);
-      toast({
-        variant: 'destructive',
-        description: response.message,
-      });
+      if (response)
+        toast({
+          variant: 'destructive',
+          description: response.message,
+        });
     });
   };
 
@@ -62,7 +63,7 @@ function EmailPasswordForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>password</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>

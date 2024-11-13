@@ -63,7 +63,7 @@ function EmailPasswordForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>password</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>

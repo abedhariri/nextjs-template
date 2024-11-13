@@ -14,7 +14,6 @@ export const metadata: Metadata = {
 
 export default async function layout({ children }: Readonly<{ children: React.ReactNode }>) {
   const session = await auth();
-  console.log('session', session);
 
   if (!session) redirect('/signin');
 

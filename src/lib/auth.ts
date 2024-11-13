@@ -4,8 +4,8 @@ import github from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 import { DynamoDBAdapter } from '@auth/dynamodb-adapter';
 import { dbClient } from './dynamodb';
-import { GetItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
 import bcrypt from 'bcryptjs';
+import { getUserByEmail } from '@/user/db';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DynamoDBAdapter(dbClient),
@@ -20,57 +20,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
+        if (!credentials?.email || !credentials?.password) return null;
 
-        console.log(credentials);
+        const user = await getUserByEmail(credentials.email as string, true);
 
-        // Prepare parameters to query the DynamoDB Users table
-        const queryParams = {
-          TableName: 'users',
-          IndexName: 'EmailIndex', // Use the email GSI for querying by email
-          KeyConditionExpression: 'Email = :email',
-          ExpressionAttributeValues: {
-            ':email': { S: credentials.email as string },
-          },
-        };
+        if (!user) return null;
 
-        try {
-          // Get user data from DynamoDB
-          const userData = await dbClient.send(new QueryCommand(queryParams));
+        const isPasswordValid = await bcrypt.compare(credentials.password as string, user.password!);
 
-          console.log(userData);
+        if (!isPasswordValid) return null;
 
-          if (!userData.Items) {
-            console.log('User does not exist.');
-            return null;
-          }
-
-          console.log(userData);
-          // Extract hashed password from the database
-          const hashedPassword = userData.Items[0].Password.S;
-
-          // Compare the provided password with the hashed password
-          const isPasswordValid = await bcrypt.compare(credentials.password as string, hashedPassword!);
-
-          if (!isPasswordValid) {
-            console.log('Invalid password.');
-            return null;
-          }
-
-          const user = {
-            email: userData.Items[0].Email.S,
-            name: userData.Items[0].Name?.S || (credentials.email as string),
-            id: userData.Items[0].UserId.S,
-          };
-          // Return user information if authentication is successful
-          console.log(user);
-          return user;
-        } catch (err) {
-          console.error('Error during user authorization', err);
-          return null;
-        }
+        return user;
       },
     }),
     github,
