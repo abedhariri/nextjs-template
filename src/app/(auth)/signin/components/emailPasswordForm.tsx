@@ -40,7 +40,7 @@ function EmailPasswordForm() {
       const token = await getCsrfToken();
       form.setValue('csrfToken', token);
     })();
-  }, []);
+  }, [form]);
 
   return (
     <Form {...form}>
