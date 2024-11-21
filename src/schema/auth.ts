@@ -14,6 +14,6 @@ export const signUpSchema = z
 
 export const signInSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8),
+  password: z.string().min(8, 'Password must be more than 8 characters'),
   csrfToken: z.string(),
 });

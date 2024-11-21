@@ -1,7 +1,8 @@
 import { dbClient } from '@/lib/dynamodb';
-import { PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
+import { PutItemCommand, QueryCommand, DeleteItemCommand, DeleteItemCommandInput } from '@aws-sdk/client-dynamodb';
 import { User } from './type';
 import { v4 as uuid } from 'uuid';
+import { marshall } from '@aws-sdk/util-dynamodb';
 
 export const getUserByEmail = async (email: string, withPassword = false): Promise<User | null> => {
   const queryParams = {
@@ -35,8 +36,22 @@ export const createUser = async (email: string, password: string) => {
     Item: {
       UserId: { S: userId },
       Email: { S: email },
-      Password: { S: password }, // Note: Storing passwords in plain text is NOT recommended. Use a hashing mechanism.
+      Password: { S: password },
     },
   };
   await dbClient.send(new PutItemCommand(putParams));
+};
+
+export const deleteUser = async (email: string) => {
+  const user = await getUserByEmail(email);
+
+  if (!user) return;
+
+  const deleteParams: DeleteItemCommandInput = {
+    TableName: 'users',
+    Key: marshall({
+      UserId: user.id,
+    }),
+  };
+  await dbClient.send(new DeleteItemCommand(deleteParams));
 };
