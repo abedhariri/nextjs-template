@@ -25,7 +25,7 @@ export default function Account({ session }: Props) {
         {session.user?.image ? (
           <Image className="rounded-full" alt="account image" src={session?.user?.image || ''} width={40} height={40} />
         ) : (
-          <div className="rounded-full bg-black p-2 text-sm text-white">
+          <div className="rounded-full bg-black w-10 h-10 text-sm text-white flex items-center justify-center">
             {getInitials(session.user?.name || session.user?.email)}
           </div>
         )}
