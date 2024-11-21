@@ -38,7 +38,6 @@ export const signUpWithEmailAndPassword = async (values: z.infer<typeof signUpSc
     await createUser(email, hashedPassword);
     await signIn('credentials', { email, password, csrfToken, redirectTo: '/' });
   } catch (err) {
-    console.log(err);
     if (isRedirectError(err)) redirect('/');
     if (err instanceof Error) return { message: err.message };
     return { message: 'Something went wrong, and we are fixing it!' };

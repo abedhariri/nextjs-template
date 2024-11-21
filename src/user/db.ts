@@ -14,19 +14,14 @@ export const getUserByEmail = async (email: string, withPassword = false): Promi
     },
   };
 
-  try {
-    const users = await dbClient.send(new QueryCommand(queryParams));
-    if (!users.Items || users.Items?.length === 0) return null;
+  const users = await dbClient.send(new QueryCommand(queryParams));
+  if (!users.Items || users.Items?.length === 0) return null;
 
-    return {
-      id: users.Items[0].UserId.S!,
-      email: users.Items[0].Email.S!,
-      password: withPassword ? users.Items[0].Password.S! : undefined,
-    };
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
+  return {
+    id: users.Items[0].UserId.S!,
+    email: users.Items[0].Email.S!,
+    password: withPassword ? users.Items[0].Password.S! : undefined,
+  };
 };
 
 export const createUser = async (email: string, password: string) => {
