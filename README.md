@@ -39,3 +39,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 add DIGITALOCEAN_TOKEN to be able to run terraform commands on digital ocean
 add PERSONAL_ACCESS_TOKEN in github action secret to be able to create releases
+
+to test releaser flow
