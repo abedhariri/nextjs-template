@@ -6,6 +6,7 @@ const config: DynamoDBClientConfig = {
     accessKeyId: process.env.AUTH_DYNAMODB_ID!,
     secretAccessKey: process.env.AUTH_DYNAMODB_SECRET!,
   },
+  endpoint: process.env.NODE_ENV === 'production' ? 'http://dynamodb-local:8000' : 'http://localhost:8000',
   region: process.env.AUTH_DYNAMODB_REGION!,
 };
 

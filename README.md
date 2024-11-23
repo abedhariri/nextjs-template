@@ -36,3 +36,6 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
 ## Update readme !!!
+
+add DIGITALOCEAN_TOKEN to be able to run terraform commands on digital ocean
+add PERSONAL_ACCESS_TOKEN in github action secret to be able to create releases

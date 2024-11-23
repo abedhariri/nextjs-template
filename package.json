@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "setup-db": "npx tsx --env-file=.env.local src/setup/db-setup.ts"
+    "setup-db": "npx tsx --env-file=.env src/setup/db-setup.ts"
   },
   "dependencies": {
     "@auth/dynamodb-adapter": "^2.7.3",
@@ -37,6 +37,9 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@semantic-release/commit-analyzer": "^13.0.0",
+    "@semantic-release/github": "^11.0.0",
+    "@semantic-release/release-notes-generator": "^14.0.1",
     "@playwright/test": "^1.49.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
