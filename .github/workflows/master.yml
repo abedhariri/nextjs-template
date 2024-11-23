@@ -32,10 +32,3 @@ jobs:
           npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }} # Token to create a release
-
-      - name: Create and push version tag
-        if: steps.release.outputs.version != ''
-        run: |
-          TAG_NAME=v${{ steps.release.outputs.version }}
-          git tag $TAG_NAME
-          git push origin $TAG_NAME
