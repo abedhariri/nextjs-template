@@ -83,8 +83,12 @@ variable "centos" {
   default     = "centos-83-x64"
 }
 
-variable "ssh_key_path" {
-  type        = string
-  description = "The file path to an ssh public key"
-  default     = "~/.ssh/id_rsa.pub"
+variable "ssh_key" {
+  type = string
+  description = "What is the name of the ssh key"
+}
+
+variable "db_password" {
+  type = string
+  description = "Choose a strong password for your postgres database"
 }

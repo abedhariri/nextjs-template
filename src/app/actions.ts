@@ -21,6 +21,14 @@ export const signInWithEmailAndPassword = async (formData: z.infer<typeof signIn
 
 export const signInWithGithub = async () => {
   await signIn('github', {
+    redirect: true,
+    redirectTo: '/',
+  });
+};
+
+export const signInWithGoogle = async () => {
+  await signIn('google', {
+    redirect: true,
     redirectTo: '/',
   });
 };

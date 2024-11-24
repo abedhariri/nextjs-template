@@ -1,9 +1,25 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import EmailPasswordForm from './components/emailPasswordForm';
-import Providers from './components/providers';
 import Link from 'next/link';
+import Providers from '@/components/providers';
 
-export default async function Page() {
+type Props = {
+  searchParams: {
+    error: 'OAuthAccountNotLinked' | string;
+  };
+};
+
+export default async function Page({ searchParams }: Props) {
+  const ErrorMessage = () => {
+    switch (searchParams.error) {
+      case 'OAuthAccountNotLinked':
+        return 'You already have an account using another provider';
+
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="h-full w-full flex items-center justify-center">
       <Card className="w-full lg:w-2/6">
@@ -11,6 +27,7 @@ export default async function Page() {
           <CardTitle>Sign in to create-saas</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
+          {searchParams.error && <p className="text-red-500">{ErrorMessage()}</p>}
           <EmailPasswordForm />
           <p>
             Dont have an account,{' '}

@@ -1,22 +1,15 @@
 services:
-  dynamodb-local:
-    command: '-jar DynamoDBLocal.jar -sharedDb -dbPath ./data'
-    image: 'amazon/dynamodb-local:latest'
-    container_name: dynamodb-local
+  db:
+    image: postgres
+    restart: always
+    shm_size: 128mb
     ports:
-      - '8000:8000'
-    volumes:
-      - './docker/dynamodb:/home/dynamodblocal/data'
-    working_dir: /home/dynamodblocal
-
-  nextjs-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: nextjs-app
-    ports:
-      - '3000:3000'
-    depends_on:
-      - dynamodb-local
+      - 5432:5432
     environment:
-      - NODE_ENV=production
+      POSTGRES_PASSWORD: example
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

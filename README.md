@@ -40,4 +40,27 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 add DIGITALOCEAN_TOKEN to be able to run terraform commands on digital ocean
 add PERSONAL_ACCESS_TOKEN in github action secret to be able to create releases
 
-to test releaser flow
+add the following secrets to github actions:
+
+#### Database
+
+- DB_HOST
+- DB_PORT
+- DB_USER
+- DB_PASSWORD
+- DB_DATABASE
+
+#### Auth
+
+- AUTH_SECRET
+- AUTH_URL
+
+#### Github provider
+
+- AUTH_GITHUB_ID
+- AUTH_GITHUB_SECRET
+
+#### Google provider
+
+- AUTH_GOOGLE_ID
+- AUTH_GOOGLE_SECRET

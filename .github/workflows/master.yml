@@ -5,6 +5,13 @@ on:
     branches:
       - main
 
+env:
+  DB_HOST: ${{ secrets.DB_HOST }}
+  DB_PORT: ${{ secrets.DB_PORT }}
+  DB_USER: ${{ secrets.DB_USER }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  DB_DATABASE: ${{ secrets.DB_DATABASE }}
+
 jobs:
   tag:
     runs-on: ubuntu-latest
@@ -32,3 +39,21 @@ jobs:
           npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }} # Token to create a release
+  migrate:
+    runs-on: ubuntu-latest
+    name: 'Running database migration'
+    needs: tag
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci --include=dev
+
+      - name: Run migration
+        run: npx ternat migrate

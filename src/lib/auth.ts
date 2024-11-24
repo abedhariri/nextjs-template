@@ -1,14 +1,15 @@
 import NextAuth from 'next-auth';
 import { encode, decode } from 'next-auth/jwt';
-import github from 'next-auth/providers/github';
+import Github from 'next-auth/providers/github';
+import Google from 'next-auth/providers/google';
 import Credentials from 'next-auth/providers/credentials';
-import { DynamoDBAdapter } from '@auth/dynamodb-adapter';
-import { dbClient } from './dynamodb';
 import bcrypt from 'bcryptjs';
 import { getUserByEmail } from '@/user/db';
+import PostgresAdapter from '@auth/pg-adapter';
+import { connection } from './db';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: DynamoDBAdapter(dbClient),
+  adapter: PostgresAdapter(connection),
   session: {
     strategy: 'jwt',
   },
@@ -33,7 +34,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return user;
       },
     }),
-    github,
+    Github,
+    Google,
   ],
   pages: {
     signIn: '/signin',

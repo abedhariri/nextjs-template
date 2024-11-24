@@ -1,7 +1,7 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import EmailPasswordForm from './components/emailPasswordForm';
-import Providers from './components/providers';
 import Link from 'next/link';
+import Providers from '@/components/providers';
 
 export default async function Page() {
   return (
