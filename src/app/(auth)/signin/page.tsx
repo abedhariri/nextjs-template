@@ -4,14 +4,15 @@ import Link from 'next/link';
 import Providers from '@/components/providers';
 
 type Props = {
-  searchParams: {
+  searchParams: Promise<{
     error: 'OAuthAccountNotLinked' | string;
-  };
+  }>;
 };
 
 export default async function Page({ searchParams }: Props) {
-  const ErrorMessage = () => {
-    switch (searchParams.error) {
+  const { error } = await searchParams;
+  const ErrorMessage = async () => {
+    switch (error) {
       case 'OAuthAccountNotLinked':
         return 'You already have an account using another provider';
 
@@ -27,7 +28,7 @@ export default async function Page({ searchParams }: Props) {
           <CardTitle>Sign in to create-saas</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          {searchParams.error && <p className="text-red-500">{ErrorMessage()}</p>}
+          {error && <p className="text-red-500">{ErrorMessage()}</p>}
           <EmailPasswordForm />
           <p>
             Dont have an account,{' '}

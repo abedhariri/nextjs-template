@@ -1,7 +1,5 @@
 import { db } from '@/lib/db';
 import { User } from './type';
-import { v4 as uuid } from 'uuid';
-import {} from '@auth/core';
 
 export const getUserByEmail = async (email: string, withPassword = false): Promise<User | null> => {
   const user = await db.readFirst<User>('SELECT * FROM users WHERE email = $1', [email]);
@@ -24,5 +22,3 @@ export const createUser = async (email: string, password: string) => {
     [email, password]
   );
 };
-
-export const deleteUser = async (email: string) => {};
