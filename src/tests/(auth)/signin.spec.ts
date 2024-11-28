@@ -1,14 +1,5 @@
-import { createUser, deleteUser } from '@/user/db';
 import { test, expect } from '@playwright/test';
-import { hashSync } from 'bcryptjs';
-
-test.beforeAll(async () => {
-  await createUser('test@test.com', hashSync('SuperStrongPassword'));
-});
-
-test.afterAll(async () => {
-  await deleteUser('test@test.com');
-});
+import { expectToastWithMessage } from '../utils';
 
 test('UI check', async ({ page }) => {
   await page.goto('/signin');
@@ -51,7 +42,7 @@ test('Incorrect email or password', async ({ page }) => {
   await page.getByLabel('Password').fill('SuperWeakPassword');
   await page.getByRole('button', { name: 'Sign in' }).click();
   await page.waitForResponse('/signin');
-  await expect(page.getByText('Email or password is incorrect')).toBeVisible();
+  await expectToastWithMessage('Email or password is incorrect', page);
 });
 
 test('Successfully signin', async ({ page }) => {
@@ -60,7 +51,9 @@ test('Successfully signin', async ({ page }) => {
   await page.getByLabel('Email').fill('test@test.com');
   await page.getByLabel('Password').fill('SuperStrongPassword');
   await page.getByRole('button', { name: 'Sign in' }).click();
-  await page.waitForResponse('/signin');
+  await page.waitForResponse('/signin', {
+    timeout: 5000,
+  });
   await expect(page).toHaveURL('/');
 });
 
@@ -68,4 +61,10 @@ test('Signin with github provider', async ({ page }) => {
   await page.goto('/signin');
   await page.getByRole('button', { name: /Github/i }).click();
   await expect(page).toHaveURL(/github.com/i);
+});
+
+test('Signin with google provider', async ({ page }) => {
+  await page.goto('/signin');
+  await page.getByRole('button', { name: /Google/i }).click();
+  await expect(page).toHaveURL(/google.com/i);
 });

@@ -22,3 +22,17 @@ export const createUser = async (email: string, password: string) => {
     [email, password]
   );
 };
+
+export const deleteUser = async (email: string) => {
+  const user = await getUserByEmail(email);
+
+  if (!user) return;
+
+  await db.execute(
+    `
+	DELETE FROM users
+  WHERE email = $1
+  `,
+    [email]
+  );
+};

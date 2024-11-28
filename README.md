@@ -56,7 +56,6 @@ add the following secrets to github actions:
 #### Auth
 
 - AUTH_SECRET
-- AUTH_URL
 
 #### Github provider
 
