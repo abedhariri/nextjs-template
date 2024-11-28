@@ -31,7 +31,9 @@ resource "digitalocean_droplet" "server" {
   ipv6               = true
   name               = var.droplet_name
   user_data          = templatefile("${path.module}/cloudinit.tpl", {
-      db_password = var.db_password
+      db_password    = var.db_password
+      domain         = var.domain
+      email          = var.email
   })
 
   connection {
@@ -44,5 +46,27 @@ resource "digitalocean_droplet" "server" {
 }
 
 data "digitalocean_ssh_key" "personal_pc" {
-  name       = var.ssh_key
+  name = var.ssh_key
+}
+
+resource "digitalocean_domain" "default" {
+  name = var.domain
+}
+
+# Add an A record to the domain for www.example.com.
+resource "digitalocean_record" "www" {
+  domain = digitalocean_domain.default.name
+  type   = "A"
+  name   = "www"
+  value  = digitalocean_droplet.server.ipv4_address
+  ttl    = 300
+}
+
+# Add a MX record for the example.com domain itself.
+resource "digitalocean_record" "root" {
+  domain   = digitalocean_domain.default.name
+  type     = "A"
+  name     = "@"
+  value    = digitalocean_droplet.server.ipv4_address
+  ttl      = 300
 }

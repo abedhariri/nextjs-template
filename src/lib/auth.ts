@@ -14,6 +14,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: 'jwt',
   },
   jwt: { encode, decode },
+  debug: true,
   providers: [
     Credentials({
       credentials: {

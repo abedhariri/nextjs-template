@@ -35,10 +35,13 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-## Update readme !!!
+## Things to do in this order
 
-add DIGITALOCEAN_TOKEN to be able to run terraform commands on digital ocean
-add PERSONAL_ACCESS_TOKEN in github action secret to be able to create releases
+#### Domain
+
+create a domain and add the 3 digital ocean name servers
+
+add DIGITALOCEAN_TOKEN to be able to run terraform
 
 add the following secrets to github actions:
 
@@ -64,3 +67,7 @@ add the following secrets to github actions:
 
 - AUTH_GOOGLE_ID
 - AUTH_GOOGLE_SECRET
+
+#### SEMANTIC RELEASER
+
+- PERSONAL_ACCESS_TOKEN

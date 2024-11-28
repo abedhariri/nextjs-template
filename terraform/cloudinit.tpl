@@ -42,10 +42,8 @@ runcmd:
     {
         listen 80;
         listen [::]:80;
-        listen 8080;
-        listen [::]:8080;
 
-        server_name _ ;
+        server_name www.${domain} ${domain};
 
         location / {
             proxy_pass http://localhost:3000;
@@ -54,3 +52,7 @@ runcmd:
     " > /etc/nginx/sites-available/default
   - sudo nginx -t
   - sudo systemctl restart nginx
+  - sudo apt-get install -y certbot python3-certbot-nginx
+  - sleep 600
+  - sudo certbot --nginx -d ${domain} -d www.${domain} --non-interactive --agree-tos -m ${email}
+  - sudo systemctl reload nginx
