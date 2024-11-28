@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { expectToastWithMessage } from '../utils';
 
 test('UI check', async ({ page }) => {
   await page.goto('/signin');
