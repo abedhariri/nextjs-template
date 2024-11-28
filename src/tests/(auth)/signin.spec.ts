@@ -42,7 +42,7 @@ test('Incorrect email or password', async ({ page }) => {
   await page.getByLabel('Password').fill('SuperWeakPassword');
   await page.getByRole('button', { name: 'Sign in' }).click();
   await page.waitForResponse('/signin');
-  await expectToastWithMessage('Email or password is incorrect', page);
+  await expect(page.getByRole('list')).toHaveText('Email or password is incorrect');
 });
 
 test('Successfully signin', async ({ page }) => {
