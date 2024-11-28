@@ -36,6 +36,7 @@ jobs:
         run: |
           npm ci --include=dev
           npm i -g pm2
+          npx playwright install
 
       - name: Set Secrets
         run: |
