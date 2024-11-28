@@ -39,6 +39,16 @@ jobs:
           npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }} # Token to create a release
+
+      - name: Push changes back to repository
+        if: steps.release.outputs.released == 'true'
+        run: |
+          git add CHANGELOG.md package.json package-lock.json
+          git commit -m "chore(release): update changelog and version"
+          git push
+        env:
+          GITHUB_TOKEN: $${{ secrets.GITHUB_TOKEN }}
+
   migrate:
     runs-on: ubuntu-latest
     name: 'Running database migration'
