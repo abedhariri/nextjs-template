@@ -8,7 +8,7 @@ export default async function Page() {
     <div className="h-full w-full flex items-center justify-center">
       <Card className="w-full lg:w-2/6">
         <CardHeader>
-          <CardTitle>Sign in to create-saas</CardTitle>
+          <CardTitle>Sign up for create-saas</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <EmailPasswordForm />

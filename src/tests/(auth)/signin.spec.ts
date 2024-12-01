@@ -40,8 +40,10 @@ test('Incorrect email or password', async ({ page }) => {
   await page.getByLabel('Email').fill('test@test.com');
   await page.getByLabel('Password').fill('SuperWeakPassword');
   await page.getByRole('button', { name: 'Sign in' }).click();
-  await page.waitForResponse('/signin');
-  await expect(page.getByRole('list')).toHaveText('Email or password is incorrect');
+  await page.waitForResponse('/signin', {
+    timeout: 5000,
+  });
+  await expect(page.getByText('Email or password is incorrect', { exact: true })).toBeVisible();
 });
 
 test('Successfully signin', async ({ page }) => {

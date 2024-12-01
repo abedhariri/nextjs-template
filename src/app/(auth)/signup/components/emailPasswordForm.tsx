@@ -85,7 +85,7 @@ function EmailPasswordForm() {
           )}
         />
         <Button type="submit" className="w-full">
-          {isPending ? '...loading' : 'Sign In'}
+          {isPending ? '...loading' : 'Sign up'}
         </Button>
       </form>
     </Form>
