@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/abedhariri/nextjs-template/compare/v1.2.1...v1.2.2) (2024-12-01)
+
+
+### Bug Fixes
+
+* updated reporter type ([c6e5ea1](https://github.com/abedhariri/nextjs-template/commit/c6e5ea13b459badddf86e77999bedfb54bf0ff7e))
+
 ## [1.2.1](https://github.com/abedhariri/nextjs-template/compare/v1.2.0...v1.2.1) (2024-12-01)
 
 
