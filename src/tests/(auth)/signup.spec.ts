@@ -84,7 +84,7 @@ test('Signup with already existing email', async ({ page }) => {
   await page.waitForResponse('/signup', {
     timeout: 5000,
   });
-  expect(page.getByText('User already exists', { exact: true })).toBeVisible();
+  expect(page.getByText('User already exists', { exact: true })).toBeVisible({ timeout: 5000 });
 });
 
 test('Signin with github provider', async ({ page }) => {

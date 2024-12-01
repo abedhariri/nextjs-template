@@ -43,7 +43,7 @@ test('Incorrect email or password', async ({ page }) => {
   await page.waitForResponse('/signin', {
     timeout: 5000,
   });
-  await expect(page.getByText('Email or password is incorrect', { exact: true })).toBeVisible();
+  await expect(page.getByText('Email or password is incorrect', { exact: true })).toBeVisible({ timeout: 5000 });
 });
 
 test('Successfully signin', async ({ page }) => {
