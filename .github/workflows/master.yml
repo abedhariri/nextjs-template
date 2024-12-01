@@ -68,7 +68,7 @@ jobs:
         run: pm2 start npm --name "test_project" -- start
 
       - name: Run Playwright tests
-        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal
+        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
       - name: Upload blob report to GitHub Actions Artifacts
         if: ${{ !cancelled() }}
@@ -81,7 +81,7 @@ jobs:
   merge-test-reports:
     # Merge reports after playwright-tests, even if some shards have failed
     if: ${{ !cancelled() }}
-    needs: [playwright-tests]
+    needs: [test]
 
     runs-on: ubuntu-latest
     steps:
