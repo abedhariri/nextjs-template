@@ -1,3 +1,13 @@
+## [1.2.1](https://github.com/abedhariri/nextjs-template/compare/v1.2.0...v1.2.1) (2024-12-01)
+
+
+### Bug Fixes
+
+* added test for signup page, small ui fixes ([a93c0ce](https://github.com/abedhariri/nextjs-template/commit/a93c0ceac0b0d88deec204ebb8fa41e92392ec21))
+* faster playwright tests ([3b8342c](https://github.com/abedhariri/nextjs-template/commit/3b8342c5a4014c448179b0e826b4b1c4f7a2e475))
+* master workflow ([f314d60](https://github.com/abedhariri/nextjs-template/commit/f314d60337429d564b2931a42a39d8ea27c04e85))
+* removed wait for response command ([9abfe4a](https://github.com/abedhariri/nextjs-template/commit/9abfe4abd96f6583ee7aca21e216d20d3828fa53))
+
 # [1.2.0](https://github.com/abedhariri/nextjs-template/compare/v1.1.2...v1.2.0) (2024-12-01)
 
 
