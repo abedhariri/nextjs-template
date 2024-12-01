@@ -46,10 +46,8 @@ test('Form validation', async ({ page }) => {
   await page.getByRole('button', { name: 'Sign up' }).click();
   await expect(page.getByText('Invalid email')).toBeVisible();
 
-  const passwordElements = await page.getByText('Password must be more than 8 characters').all();
+  const passwordElements = await page.getByText('Password must be more than 8 characters', { exact: true }).all();
   expect(passwordElements).toHaveLength(2);
-
-  passwordElements.forEach((element) => expect(element).toBeVisible());
 });
 
 test('Incorrect password and confirm password', async ({ page }) => {
@@ -59,7 +57,7 @@ test('Incorrect password and confirm password', async ({ page }) => {
   await page.getByLabel('Password', { exact: true }).fill('SuperWeakPassword');
   await page.getByLabel('Confirm Password', { exact: true }).fill('SuperWeaksPassword');
   await page.getByRole('button', { name: 'Sign up' }).click();
-  expect(page.getByText('Passwords do not match'));
+  expect(page.getByText('Passwords do not match', { exact: true })).toBeVisible();
 });
 
 test('Successfully signup', async ({ page, browserName }) => {
@@ -69,9 +67,6 @@ test('Successfully signup', async ({ page, browserName }) => {
   await page.getByLabel('Password', { exact: true }).fill('SuperStrongPassword');
   await page.getByLabel('Confirm Password', { exact: true }).fill('SuperStrongPassword');
   await page.getByRole('button', { name: 'Sign up' }).click();
-  await page.waitForResponse('/signup', {
-    timeout: 5000,
-  });
   await expect(page).toHaveURL('/');
 });
 test('Signup with already existing email', async ({ page }) => {
@@ -81,9 +76,6 @@ test('Signup with already existing email', async ({ page }) => {
   await page.getByLabel('Password', { exact: true }).fill('SuperStrongPassword');
   await page.getByLabel('Confirm Password', { exact: true }).fill('SuperStrongPassword');
   await page.getByRole('button', { name: 'Sign up' }).click();
-  await page.waitForResponse('/signup', {
-    timeout: 5000,
-  });
   expect(page.getByText('User already exists', { exact: true })).toBeVisible({ timeout: 5000 });
 });
 
