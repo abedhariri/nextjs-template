@@ -40,7 +40,7 @@ runcmd:
   - sudo docker compose -f root/docker-compose.yml up -d
   - sudo tee /etc/nginx/sites-available/default > /dev/null
   - |
-    echo "server
+    echo 'server
     {
         listen 80;
         listen [::]:80;
@@ -56,7 +56,7 @@ runcmd:
             proxy_set_header X-Forwarded-Proto $scheme;
         }
     }
-    " > /etc/nginx/sites-available/default
+    ' > /etc/nginx/sites-available/default
   - sudo nginx -t
   - sudo systemctl restart nginx
   - sudo apt-get install -y certbot python3-certbot-nginx
