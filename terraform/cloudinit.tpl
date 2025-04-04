@@ -19,8 +19,6 @@ runcmd:
                 - WATCHTOWER_POLL_INTERVAL=60
                 - WATCHTOWER_CLEANUP=true
                 - WATCHTOWER_ROLLING_RESTART=true
-            volumes:
-                - postgres_data:/var/lib/postgresql/data
             labels:
                 - 'com.centurylinklabs.watchtower.enable=false'
         db:
@@ -33,6 +31,8 @@ runcmd:
                 - POSTGRES_PASSWORD=${db_password}
             labels:
                 - 'com.centurylinklabs.watchtower.enable=false'
+            volumes:
+                - postgres_data:/var/lib/postgresql/data
     volumes:
         postgres_data:
 
