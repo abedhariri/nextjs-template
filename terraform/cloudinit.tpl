@@ -13,10 +13,6 @@ runcmd:
   - |
     echo "
     services:
-        nextApp:
-            image: ghcr.io/abedhariri/nextjs-template:latest
-            ports:
-                - 3000:3000
         watchtower:
             image: containrrr/watchtower
             environment:
@@ -25,6 +21,8 @@ runcmd:
                 - WATCHTOWER_ROLLING_RESTART=true
             volumes:
                 - postgres_data:/var/lib/postgresql/data
+            labels:
+                - 'com.centurylinklabs.watchtower.enable=false'
         db:
             image: postgres
             restart: always
@@ -33,6 +31,8 @@ runcmd:
                 - 5432:5432
             environment:
                 - POSTGRES_PASSWORD=${db_password}
+            labels:
+                - 'com.centurylinklabs.watchtower.enable=false'
     volumes:
         postgres_data:
 
