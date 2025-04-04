@@ -6,10 +6,10 @@ import Credentials from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import { getUserByEmail } from '@/user/db';
 import PostgresAdapter from '@auth/pg-adapter';
-import { connection } from './db';
+import { pool } from './db';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: PostgresAdapter(connection),
+  adapter: PostgresAdapter(pool),
   session: {
     strategy: 'jwt',
   },
