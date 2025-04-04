@@ -1,8 +1,26 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a project to quickly start development & deployment using nextjs app directory, next-auth and a postgres db.
 
-## Getting Started
+## Getting Started on local
 
-First, run the development server:
+#### Environment variables
+
+Fill out the variables
+
+```
+DB_HOST
+DB_PORT
+DB_USER
+DB_PASSWORD
+DB_DATABASE
+
+AUTH_SECRET
+AUTH_GITHUB_ID
+AUTH_GITHUB_SECRET
+AUTH_GOOGLE_ID
+AUTH_GOOGLE_SECRET
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
@@ -14,59 +32,100 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deployment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Create a domain
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a domain and add the following name servers
 
-## Learn More
+- ns1.digitalocean.com
+- ns2.digitalocean.com
+- ns3.digitalocean.com
 
-To learn more about Next.js, take a look at the following resources:
+### Create github actions secrets
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+AUTH_SECRET
+AUTH_GITHUB_ID
+AUTH_GITHUB_SECRET
+AUTH_GOOGLE_ID
+AUTH_GOOGLE_SECRET
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+AUTH_GITHUB_ID_TEST
+AUTH_GITHUB_SECRET_TEST
+AUTH_GOOGLE_ID_TEST
+AUTH_GOOGLE_SECRET_TEST
 
-## Deploy on Vercel
+DB_HOST
+DB_USER
+DB_PORT
+DB_PASSWORD
+DB_DATABASE (optional)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+PERSONAL_ACCESS_TOKEN (Classic Personal Access Token)
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Deploy using terraform
 
-## Things to do in this order
+Get a api key with the following scope
 
-#### Domain
+```
+account (1): read
+actions (1): read
+billing (1): read
+domain (4): create, read, update, delete
+droplet (4): create, read, update, delete
+regions (1): read
+sizes (1): read
+ssh_key (4): create, read, update, delete
+```
 
-create a domain and add the 3 digital ocean name servers
+Then run this command on mac
 
-add DIGITALOCEAN_TOKEN to be able to run terraform
+`export DIGITALOCEAN_TOKEN=<DIGITAL_OCEAN_API_KEY>`
 
-add the following secrets to github actions:
+Then run in cli
 
-#### Database
+`terraform plan`
 
-- DB_HOST
-- DB_PORT
-- DB_USER
-- DB_PASSWORD
-- DB_DATABASE
+This will plan the deployment and finally if everything looks good then run in cli
 
-#### Auth
+`terraform apply`
 
-- AUTH_SECRET
+### Login using ghocr on vps
 
-#### Github provider
+To be able to pull your nextjs app image you need to login, use the following command on vps and use your github Personal Access Token as the password
 
-- AUTH_GITHUB_ID
-- AUTH_GITHUB_SECRET
+`docker login ghcr.io -u USERNAME`
 
-#### Google provider
+Finally go into the docker-compose and add your nextjs application service like this
 
-- AUTH_GOOGLE_ID
-- AUTH_GOOGLE_SECRET
-
-#### SEMANTIC RELEASER
-
-- PERSONAL_ACCESS_TOKEN
+```yml
+services:
+	nextApp:
+		image: <IMAGE>:latest
+		ports:
+			- 3000:3000
+	watchtower:
+		image: containrrr/watchtower
+		environment:
+				- WATCHTOWER_POLL_INTERVAL=60
+				- WATCHTOWER_CLEANUP=true
+				- WATCHTOWER_ROLLING_RESTART=true
+		volumes:
+				- postgres_data:/var/lib/postgresql/data
+		labels:
+				- 'com.centurylinklabs.watchtower.enable=false'
+	db:
+		image: postgres
+		restart: always
+		shm_size: 128mb
+		ports:
+				- 5432:5432
+		environment:
+				- POSTGRES_PASSWORD=${db_password}
+		labels:
+				- 'com.centurylinklabs.watchtower.enable=false'
+volumes:
+		postgres_data:
+```
