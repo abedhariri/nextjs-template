@@ -70,21 +70,21 @@ PERSONAL_ACCESS_TOKEN (Classic Personal Access Token)
 Get a api key with the following scope
 
 ```
-account (1): read
-actions (1): read
-billing (1): read
 domain (4): create, read, update, delete
 droplet (4): create, read, update, delete
-regions (1): read
-sizes (1): read
-ssh_key (4): create, read, update, delete
+project (4): create, read, update, delete
+ssh_key (4): read
 ```
 
 Then run this command on mac
 
 `export DIGITALOCEAN_TOKEN=<DIGITAL_OCEAN_API_KEY>`
 
-Then run in cli
+First run inside the terraform/ folder
+
+`terraform init`
+
+Then
 
 `terraform plan`
 
