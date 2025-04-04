@@ -24,7 +24,7 @@ runcmd:
                 - WATCHTOWER_CLEANUP=true
                 - WATCHTOWER_ROLLING_RESTART=true
             volumes:
-                - /var/run/docker.sock:/var/run/docker.sock
+                - postgres_data:/var/lib/postgresql/data
         db:
             image: postgres
             restart: always
@@ -33,6 +33,8 @@ runcmd:
                 - 5432:5432
             environment:
                 - POSTGRES_PASSWORD=${db_password}
+    volumes:
+        postgres_data:
 
     " > /root/docker-compose.yml
   - sudo docker compose -f root/docker-compose.yml up -d
@@ -47,6 +49,11 @@ runcmd:
 
         location / {
             proxy_pass http://localhost:3000;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Host $host;
+            proxy_set_header X-Forwarded-Proto $scheme;
         }
     }
     " > /etc/nginx/sites-available/default
