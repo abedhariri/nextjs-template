@@ -4,8 +4,8 @@ import { AppSidebar } from '@/components/appSidebar';
 import { Separator } from '@radix-ui/react-separator';
 
 import Account from '@/components/account';
-import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import { getSession } from '@/lib/auth';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function layout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const session = await auth();
+  const session = await getSession();
 
   if (!session) redirect('/signin');
 

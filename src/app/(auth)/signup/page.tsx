@@ -19,9 +19,7 @@ export default async function Page() {
             </Link>
           </p>
         </CardContent>
-        <CardFooter className="flex flex-col gap-3">
-          <Providers />
-        </CardFooter>
+        <CardFooter className="flex flex-col gap-3">{/* <Providers /> */}</CardFooter>
       </Card>
     </div>
   );

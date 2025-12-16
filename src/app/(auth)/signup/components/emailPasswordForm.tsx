@@ -2,14 +2,13 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useEffect, useTransition } from 'react';
+import { useTransition } from 'react';
 import { signUpWithEmailAndPassword } from '@/app/actions';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { signUpSchema } from '@/schema/auth';
-import { getCsrfToken } from 'next-auth/react';
 import { useToast } from '@/hooks/use-toast';
 
 function EmailPasswordForm() {
@@ -26,21 +25,13 @@ function EmailPasswordForm() {
   });
 
   const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
+    console.log('asdasd');
     startTransition(async () => {
-      const response = await signUpWithEmailAndPassword(values);
-      toast({
-        variant: 'destructive',
-        description: response?.message,
-      });
+      await signUpWithEmailAndPassword(values);
     });
   };
 
-  useEffect(() => {
-    (async function getToken() {
-      const token = await getCsrfToken();
-      form.setValue('csrfToken', token);
-    })();
-  }, [form]);
+  console.log(form.formState.errors);
 
   return (
     <Form {...form}>

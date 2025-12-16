@@ -1,3 +1,5 @@
+'use client';
+
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -6,18 +8,31 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { signOut } from '@/lib/auth';
+import { Session } from '@/lib/auth';
+import { signOut } from '@/lib/auth-client';
 import { getInitials } from '@/lib/utils';
 import { LogOut } from 'lucide-react';
-import { Session } from 'next-auth';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   session: Session | null;
 };
 
 export default function Account({ session }: Props) {
+  const router = useRouter();
+
   if (!session) return null;
+
+  const handleSignOut = async () => {
+    await signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push('/signin');
+        },
+      },
+    });
+  };
 
   return (
     <DropdownMenu>
@@ -33,14 +48,7 @@ export default function Account({ session }: Props) {
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={async () => {
-            'use server';
-            await signOut({
-              redirectTo: '/signin',
-            });
-          }}
-        >
+        <DropdownMenuItem onClick={handleSignOut}>
           <LogOut />
           Sign out
         </DropdownMenuItem>

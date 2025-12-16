@@ -1,53 +1,39 @@
 'use server';
 
-import { signIn } from '@/lib/auth';
-import { isRedirectError } from 'next/dist/client/components/redirect';
-import { redirect } from 'next/navigation';
-import { hashSync } from 'bcryptjs';
 import { z } from 'zod';
 import { signInSchema, signUpSchema } from '@/schema/auth';
-import { createUser, getUserByEmail } from '@/user/db';
+import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
-export const signInWithEmailAndPassword = async (formData: z.infer<typeof signInSchema>) => {
+export const signInWithEmailAndPassword = async (credentials: z.infer<typeof signInSchema>) => {
   try {
-    await signIn('credentials', formData);
+    await auth.api.signInEmail({
+      body: {
+        email: credentials.email,
+        password: credentials.password,
+      },
+    });
   } catch (error) {
-    if (isRedirectError(error)) redirect('/');
-    return {
-      message: 'Email or password is incorrect',
-    };
+    console.log(error);
+    throw error;
   }
+
+  redirect('/');
 };
 
-export const signInWithGithub = async () => {
-  await signIn('github', {
-    redirect: true,
-    redirectTo: '/',
-  });
-};
-
-export const signInWithGoogle = async () => {
-  await signIn('google', {
-    redirect: true,
-    redirectTo: '/',
-  });
-};
-
-export const signUpWithEmailAndPassword = async (values: z.infer<typeof signUpSchema>) => {
+export const signUpWithEmailAndPassword = async (credentials: z.infer<typeof signUpSchema>) => {
   try {
-    signUpSchema.parse(values);
-    const { email, password, csrfToken } = values;
-    const userData = await getUserByEmail(email);
-
-    if (userData) throw new Error('User already exists');
-
-    const hashedPassword = hashSync(password, 10);
-
-    await createUser(email, hashedPassword);
-    await signIn('credentials', { email, password, csrfToken, redirectTo: '/' });
-  } catch (err) {
-    if (isRedirectError(err)) redirect('/');
-    if (err instanceof Error) return { message: err.message };
-    return { message: 'Something went wrong, and we are fixing it!' };
+    await auth.api.signUpEmail({
+      body: {
+        email: credentials.email,
+        name: 'test-user',
+        password: credentials.password,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
+
+  redirect('/');
 };

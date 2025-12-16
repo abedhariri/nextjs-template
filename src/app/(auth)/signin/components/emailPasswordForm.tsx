@@ -2,9 +2,8 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useEffect, useTransition } from 'react';
+import { useTransition } from 'react';
 import { signInWithEmailAndPassword } from '@/app/actions';
-import { getCsrfToken } from 'next-auth/react';
 import { signInSchema } from '@/schema/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -26,21 +25,9 @@ function EmailPasswordForm() {
 
   const onSubmit = async (values: z.infer<typeof signInSchema>) => {
     startTransition(async () => {
-      const response = await signInWithEmailAndPassword(values);
-      if (response)
-        toast({
-          variant: 'destructive',
-          description: response.message,
-        });
+      await signInWithEmailAndPassword(values);
     });
   };
-
-  useEffect(() => {
-    (async function getToken() {
-      const token = await getCsrfToken();
-      form.setValue('csrfToken', token);
-    })();
-  }, [form]);
 
   return (
     <Form {...form}>
