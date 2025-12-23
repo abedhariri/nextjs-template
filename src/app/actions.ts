@@ -5,7 +5,9 @@ import { signInSchema, signUpSchema } from '@/schema/auth';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 
-export const signInWithEmailAndPassword = async (credentials: z.infer<typeof signInSchema>): Promise<{ error?: string }> => {
+export const signInWithEmailAndPassword = async (
+  credentials: z.infer<typeof signInSchema>
+): Promise<{ error?: string }> => {
   try {
     await auth.api.signInEmail({
       body: {
