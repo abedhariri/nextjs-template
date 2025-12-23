@@ -31,7 +31,7 @@ export const signUpWithEmailAndPassword = async (credentials: z.infer<typeof sig
     await auth.api.signUpEmail({
       body: {
         email: credentials.email,
-        name: 'test-user',
+        name: credentials.name,
         password: credentials.password,
       },
     });

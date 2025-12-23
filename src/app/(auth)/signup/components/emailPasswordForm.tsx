@@ -18,6 +18,7 @@ function EmailPasswordForm() {
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
+      name: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -33,6 +34,17 @@ function EmailPasswordForm() {
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
       <FieldGroup>
+        <Controller
+          name="name"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="signup-name">Name</FieldLabel>
+              <Input {...field} id="signup-name" type="text" aria-invalid={fieldState.invalid} autoComplete="name" />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
         <Controller
           name="email"
           control={form.control}
