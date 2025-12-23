@@ -65,7 +65,10 @@
 
 ## Preferred libraries & patterns
 
-- **Forms:** Use **React Hook Form** with **Zod** for schema validation. Define Zod schemas in shared modules and use them for both form validation and server-side input parsing.
+- **Forms:** Use **React Hook Form** with **Zod** for schema validation and the new shadcn/ui `Field` components with `Controller`. Define Zod schemas in shared modules (`src/schema/`) and use them for both form validation and server-side input parsing.
+  - Use `Controller` from `react-hook-form` instead of the deprecated `FormField`.
+  - Use `Field`, `FieldLabel`, `FieldError`, `FieldGroup` from `@/components/ui/field`.
+  - Add `data-invalid={fieldState.invalid}` to `Field` and `aria-invalid={fieldState.invalid}` to inputs.
 - **HTTP**: fetch/`next` runtime; avoid axios unless the repo already uses it.
 - **Validation**: `zod` schemas shared between client/server where feasible.
 - **Dates**: `date-fns` over heavy alternatives.
@@ -167,6 +170,65 @@ import { PrismaClient } from '@prisma/client';
 const g = globalThis as unknown as { prisma?: PrismaClient };
 export const prisma = g.prisma ?? new PrismaClient();
 if (process.env.NODE_ENV !== 'production') g.prisma = prisma;
+```
+
+### Form with Field components (React Hook Form + Zod)
+
+```tsx
+'use client';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+
+const formSchema = z.object({
+  email: z.string().email('Enter a valid email address.'),
+  password: z.string().min(8, 'Password must be at least 8 characters.'),
+});
+
+export function ExampleForm() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { email: '', password: '' },
+  });
+
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    console.log(data);
+  };
+
+  return (
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <FieldGroup>
+        <Controller
+          name="email"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <Input {...field} id="email" type="email" aria-invalid={fieldState.invalid} />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        <Controller
+          name="password"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="password">Password</FieldLabel>
+              <Input {...field} id="password" type="password" aria-invalid={fieldState.invalid} />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+      </FieldGroup>
+      <Button type="submit">Submit</Button>
+    </form>
+  );
+}
 ```
 
 ---

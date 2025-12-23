@@ -6,9 +6,9 @@ import { useState, useTransition } from 'react';
 import { signInWithEmailAndPassword } from '@/app/actions';
 import { signInSchema } from '@/schema/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { useToast } from '@/hooks/use-toast';
 
 function EmailPasswordForm() {
@@ -35,40 +35,42 @@ function EmailPasswordForm() {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
-        {error && <div className="p-3 text-sm text-red-500 bg-red-50">{error}</div>}
-        <FormField
+    <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+      {error && <div className="p-3 text-sm text-red-500 bg-red-50 rounded-md">{error}</div>}
+      <FieldGroup>
+        <Controller
           name="email"
           control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input type="email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="signin-email">Email</FieldLabel>
+              <Input {...field} id="signin-email" type="email" aria-invalid={fieldState.invalid} autoComplete="email" />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
           )}
         />
-        <FormField
+        <Controller
           name="password"
           control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type="password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="signin-password">Password</FieldLabel>
+              <Input
+                {...field}
+                id="signin-password"
+                type="password"
+                aria-invalid={fieldState.invalid}
+                autoComplete="current-password"
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
           )}
         />
-        <Button type="submit" className="w-full">
-          {isPending ? '...loading' : 'Sign In'}
-        </Button>
-      </form>
-    </Form>
+      </FieldGroup>
+      <Button type="submit" className="w-full" disabled={isPending}>
+        {isPending ? '...loading' : 'Sign In'}
+      </Button>
+    </form>
   );
 }
 
