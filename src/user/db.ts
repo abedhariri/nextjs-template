@@ -1,26 +1,17 @@
-import { db } from '@/lib/db';
-import { User } from './type';
+import { prisma } from '@/server/db';
 
-export const getUserByEmail = async (email: string, withPassword = false): Promise<User | null> => {
-  const user = await db.readFirst<User>('SELECT * FROM users WHERE email = $1', [email]);
-  if (!user) return null;
-  if (!withPassword) delete user.password;
+export const getUserByEmail = async (email: string) => {
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
   return user;
 };
 
-export const createUser = async (email: string, password: string) => {
-  await db.execute(
-    `
-	INSERT INTO users (
-    email,
-		password
-	)
-	VALUES (
-		$1,
-		$2
-	)`,
-    [email, password]
-  );
+export const getUserById = async (id: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id },
+  });
+  return user;
 };
 
 export const deleteUser = async (email: string) => {
@@ -28,11 +19,7 @@ export const deleteUser = async (email: string) => {
 
   if (!user) return;
 
-  await db.execute(
-    `
-	DELETE FROM users
-  WHERE email = $1
-  `,
-    [email]
-  );
+  await prisma.user.delete({
+    where: { email },
+  });
 };

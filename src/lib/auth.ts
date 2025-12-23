@@ -1,5 +1,6 @@
 import { betterAuth } from 'better-auth';
-import { pool } from './db';
+import { prismaAdapter } from 'better-auth/adapters/prisma';
+import { prisma } from '@/server/db';
 import { headers } from 'next/headers';
 import { nextCookies } from 'better-auth/next-js';
 import { compareSync, hashSync } from 'bcryptjs';
@@ -27,7 +28,9 @@ export type Session = {
 };
 
 export const auth = betterAuth({
-  database: pool,
+  database: prismaAdapter(prisma, {
+    provider: 'postgresql',
+  }),
   emailAndPassword: {
     enabled: true,
     password: {
