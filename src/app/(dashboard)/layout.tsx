@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/appSidebar';
-import { Separator } from '@radix-ui/react-separator';
 
 import Account from '@/components/account';
 import { redirect } from 'next/navigation';
@@ -23,7 +22,6 @@ export default async function layout({ children }: Readonly<{ children: React.Re
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 h-4" />
           <Account session={session} />
         </header>
         {children}

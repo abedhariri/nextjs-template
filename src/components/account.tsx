@@ -36,7 +36,7 @@ export default function Account({ session }: Props) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="ml-auto">
+      <DropdownMenuTrigger className="ml-auto" suppressHydrationWarning>
         {session.user?.image ? (
           <Image className="rounded-full" alt="account image" src={session?.user?.image || ''} width={40} height={40} />
         ) : (
