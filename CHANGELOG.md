@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/abedhariri/nextjs-template/compare/v1.2.2...v1.3.0) (2025-12-23)
+
+
+### Features
+
+* add name field to sign-up form and update validation schema ([2c4171e](https://github.com/abedhariri/nextjs-template/commit/2c4171e5e2d1c38c21375336084faed4ddce112c))
+
 ## [1.2.2](https://github.com/abedhariri/nextjs-template/compare/v1.2.1...v1.2.2) (2024-12-01)
 
 
