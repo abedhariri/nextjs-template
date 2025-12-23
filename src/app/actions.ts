@@ -5,7 +5,7 @@ import { signInSchema, signUpSchema } from '@/schema/auth';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 
-export const signInWithEmailAndPassword = async (credentials: z.infer<typeof signInSchema>) => {
+export const signInWithEmailAndPassword = async (credentials: z.infer<typeof signInSchema>): Promise<{ error?: string }> => {
   try {
     await auth.api.signInEmail({
       body: {
@@ -15,7 +15,10 @@ export const signInWithEmailAndPassword = async (credentials: z.infer<typeof sig
     });
   } catch (error) {
     console.log(error);
-    throw error;
+    if (error instanceof Error) {
+      return { error: 'Invalid email or password' };
+    }
+    return { error: 'An unexpected error occurred' };
   }
 
   redirect('/');
